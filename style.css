@@ -1,0 +1,29 @@
+body {
+    font-family: Tahoma;
+    max-width: 800px;
+    margin: auto;
+    background: #e78e7e;
+    padding: 20px;
+}
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+table {
+    width: 100px;
+    border-collapse: collapse;
+    background: whitesmoke;
+}
+th, th {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    min-width: 100px;
+    height: 50px;
+}
+td.filled {
+    background: #d4edda;
+    font-weight: bold;
+}
