@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конструктор расписания</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Конструктор расписания</h1>
+
+    <div class="controls">
+        <input id="subject" type="text" placeholder="Название предмета">
+        <select id="type">
+            <option>Лекция</option>
+            <option>Практика</option>
+        </select>
+        <select id="day">
+            <option>Пн</option>
+            <option>Вт</option>
+            <option>Ср</option>
+            <option>Чт</option>
+            <option>Пт</option>
+            <option>Сб</option>
+            <option>Вс</option>
+        </select>
+        <select id="slot">
+            <option>1 пара</option>
+            <option>2 пара</option>
+            <option>3 пара</option>
+            <option>4 пара</option>
+            <option>5 пара</option>
+            <option>6 пара</option>
+        </select>
+        <button id="addBtn">Добавить</button>
+    </div>
+
+    <table id="schedule">
+        <thred>
+            <tr>
+                <th></th>
+                <th>Пн</th>
+                <th>Вт</th>
+                <th>Ср</th>
+                <th>Чт</th>
+                <th>Пт</th>
+                <th>Сб</th>
+                <th>Вс</th>
+            </tr>
+        </thred>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
