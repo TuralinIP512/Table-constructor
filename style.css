@@ -12,7 +12,7 @@ body {
     flex-wrap: wrap;
 }
 table {
-    width: 100px;
+    width: 100%;
     border-collapse: collapse;
     background: whitesmoke;
 }
