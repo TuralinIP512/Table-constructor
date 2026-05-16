@@ -16,7 +16,7 @@ table {
     border-collapse: collapse;
     background: whitesmoke;
 }
-th, th {
+td, th {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
@@ -26,4 +26,8 @@ th, th {
 td.filled {
     background: #d4edda;
     font-weight: bold;
+}
+small {
+    color: #666;
+    font-weight: normal;
 }
