@@ -9,6 +9,11 @@
     <h1>Конструктор расписания</h1>
 
     <div class="controls">
+        <button id="manualBtn">Ручное добавление</button>
+        <button id="autoBtn">Автоматическая генерация</button>
+    </div>
+
+    <div id="manual" class="mode">
         <input id="subject" type="text" placeholder="Название предмета">
         
         <select id="type">
@@ -36,6 +41,20 @@
         </select>
 
         <button id="addBtn">Добавить</button>
+    </div>
+
+    <div id="auto" class="mode" style="display: none;">
+        <input id="autoSubject" type="text" placeholder="Название предмета">
+        
+        <select id="autoType">
+            <option>Лекция</option>
+            <option>Практика</option>
+        </select>
+
+        <button id="autoAddBtn">Добавить в список</button>
+        <button id="genBtn">Сгенерировать</button>
+        <button id="clearBtn">Очистить список</button>
+        <ul id="subjectList"></ul>
     </div>
 
     <table id="schedule">
