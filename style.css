@@ -31,3 +31,27 @@ small {
     color: #666;
     font-weight: normal;
 }
+.mode {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.mode-wrapper {
+    min-height: 60px;
+    margin-bottom: 20px;
+}
+#subjectList {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+#subjectList li {
+    background: #e9ecef;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 5px;
+    display: inline-block;
+}

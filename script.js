@@ -1,10 +1,41 @@
 window.onload = function() {
+    let manualBtn = document.getElementById("manualBtn");
+    let autoBtn = document.getElementById("autoBtn");
+    let manual = document.getElementById("manual");
+    let auto = document.getElementById("auto");
+
+    // Manual mode
     let button = document.getElementById("addBtn");
     let subjectInput = document.getElementById("subject");
     let typeInput = document.getElementById("type");
     let dayInput = document.getElementById("day");
     let slotInput = document.getElementById("slot");
 
+    // Automatic mode
+    let autoSubjectInput = document.getElementById("autoSubject");
+    let autoTypeInput = document.getElementById("autoType");
+    let autoAddBtn = document.getElementById("autoAddBtn");
+    let generateBtn = document.getElementById("genBtn");
+    let clearBtn = document.getElementById("clearBtn");
+    let subjectList = document.getElementById("subjectList");
+
+    let subjects = [];
+
+    // Modes chanching
+    manualBtn.onclick = function() {
+        manual.style.display = "flex";
+        auto.style.display = "none";
+        manualBtn.style.background = "#86e79d";
+        autoBtn.style.background = "";
+    };
+    autoBtn.onclick = function() {
+        manual.style.display = "none";
+        auto.style.display = "flex";
+        manualBtn.style.background = "";
+        autoBtn.style.background = "#86e79d";
+    };
+
+    // Manual mode
     button.onclick = function() {
         let subject = subjectInput.value.trim();
         let type = typeInput.value;
