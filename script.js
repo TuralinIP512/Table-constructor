@@ -63,4 +63,102 @@ window.onload = function() {
         cell.className = "filled";
         subjectInput.value = "";
     };
+
+    // Automatic mode
+    autoAddBtn.onclick = function() {
+        let subject = autoSubjectInput.value.trim();
+        let type = autoTypeInput.value;
+
+        if(subject === "") {
+            alert("Введите название предмета");
+            return;
+        }
+
+        subjects.push({ name: subject, type: type});
+
+        let li = document.createElement("li");
+        li.textContent = subject + " (" + typr + ")";
+        subjectList.appendChild(li);
+
+        autoSubjectInput.value = "";
+    };
+    clearBtn.onclick = function() {
+        subjects = [];
+        subjectList.innerHTML = "";
+    };
+    generateBtn.onclick = function() {
+        if(subjects.length === 0) {
+            alert("Добавьте хотя бы один предмет в список");
+            return;
+        }
+
+        if(subjects.length > 42) {
+            alert("Слишком много предметов. Максимально допустимое значение 42");
+            return;
+        }
+        
+        let table = document.getElementById("schedule");
+        for(let r = 1; r <= 6; r++) {
+            for(let c = 1; c <= 7; c++) {
+                table.rows[r].cells[c].innerHTML = "";
+                table.rows[r].cells[c].className = "";
+            }
+        }
+
+        let lectures = subjects.filter(s => s.type === "Лекция");
+        let practices = subjects.filter(s => s.type === "Практика");
+
+        let cells = [];
+        for(let r = 1; r <= 6; r++) {
+            for(let c = 1; c <= 7; c++) {
+                cells.push({ row: r, col: c });
+            }
+        }
+
+        cells.sort(() => Math.random() - 0.5);
+
+        let usedCells = [];
+
+        for(let lecture of lectures) {
+            let placed = false;
+            for(let cell of cells) {
+                if(usedCells.includes(cell)) continue;
+
+                let countInDay = usedCells.filter(c => c.col == cell.col).length;
+
+                if(countInDay < 3) {
+                    usedCells.push(cell);
+                    table.rows[cell.row].cells[cell.col].innerHTML = lecture.name + "<br><small>Лекция</small>";
+                    table.rows[cell.row].cells[cell.col].className = "filled";
+                    placed = true;
+                    break;
+                }
+            }
+            if(!placed) {
+                alert("Не удалось разместить все лекции");
+                return;
+            }
+        }
+
+        for(let practise of practices) {
+            let palced = false;
+            for(let cell of cells) {
+                if(usedCells.includes(cell)) continue;
+
+                let countInDay = usedCells.filter(c => c.col === cell.col).length;
+
+                if(countInDay < 3) {
+                    usedCells.push(cell);
+                    table.rows[cell.row].cwlls[cell.col].innerHTML = practise.name + "<br><small><Практика/small>";
+                    table.rows[cell.row].cells[cell.col].className = "filled";
+                    placed = true;
+                    break;
+                }
+            }
+            if(!placed) {
+                alert("Не удалось разместить все практики");
+                return;
+            }
+        }
+    };
 };
