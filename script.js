@@ -76,15 +76,13 @@ window.onload = function() {
 
         subjects.push({ name: subject, type: type});
 
-        let li = document.createElement("li");
-        li.textContent = subject + " (" + typr + ")";
-        subjectList.appendChild(li);
+        refreshList();
 
         autoSubjectInput.value = "";
     };
     clearBtn.onclick = function() {
         subjects = [];
-        subjectList.innerHTML = "";
+        refreshList();
     };
     generateBtn.onclick = function() {
         if(subjects.length === 0) {
@@ -110,7 +108,7 @@ window.onload = function() {
 
         let cells = [];
         for(let r = 1; r <= 6; r++) {
-            for(let c = 1; c <= 7; c++) {
+            for(let c = 1; c <= 6; c++) {
                 cells.push({ row: r, col: c });
             }
         }
@@ -141,7 +139,7 @@ window.onload = function() {
         }
 
         for(let practise of practices) {
-            let palced = false;
+            let placed = false;
             for(let cell of cells) {
                 if(usedCells.includes(cell)) continue;
 
@@ -149,7 +147,7 @@ window.onload = function() {
 
                 if(countInDay < 3) {
                     usedCells.push(cell);
-                    table.rows[cell.row].cwlls[cell.col].innerHTML = practise.name + "<br><small><Практика/small>";
+                    table.rows[cell.row].cells[cell.col].innerHTML = practise.name + "<br><small>Практика</small>";
                     table.rows[cell.row].cells[cell.col].className = "filled";
                     placed = true;
                     break;
@@ -161,4 +159,30 @@ window.onload = function() {
             }
         }
     };
+
+
+    // Updating list on the screen
+    function refreshList() {
+        subjectList.innerHTML = "";
+
+        for(let i = 0; i < subjects.length; i++) {
+            let s = subjects[i];
+            let li = document.createElement("li");
+            li.textContent = s.name + " (" + s.type + ") ";
+
+            let delBtn = document.createElement("button");
+            delBtn.textContent = "x";
+            delBtn.onclick = function() {
+                subjects.splice(i, 1);
+                refreshList();
+            };
+
+            li.appendChild(delBtn);
+            subjectList.appendChild(li);
+        }
+
+        let lectures = subjects.filter(s => s.type === "Лекция").length;
+        let practices = subjects.filter(s => s.type === "Практика").length;
+        document.getElementById("countInfo").textContent = subjects.length + " (лекций: " + lectures + ", практик: " + practices + ")";
+    }
 };
