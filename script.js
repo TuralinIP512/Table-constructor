@@ -21,6 +21,9 @@ window.onload = function() {
 
     let subjects = [];
 
+    let saveBtn = document.getElementById("saveBtn");
+    saveBtn.onclick = saveScheduleToFile;
+
     // Modes chanching
     manualBtn.onclick = function() {
         manual.style.display = "flex";
@@ -184,5 +187,42 @@ window.onload = function() {
         let lectures = subjects.filter(s => s.type === "Лекция").length;
         let practices = subjects.filter(s => s.type === "Практика").length;
         document.getElementById("countInfo").textContent = subjects.length + " (лекций: " + lectures + ", практик: " + practices + ")";
+    }
+
+
+    // Writing table in file
+    function saveScheduleToFile() {
+        const table = document.getElementById("schedule");
+        const scheduleData = [];
+
+        for (let r = 1; r <= 6; r++) {
+            for (let c = 1; c <= 7; c++) {
+                const cellContent = table.rows[r].cells[c].innerHTML.trim();
+                if (cellContent !== "") {
+                    scheduleData.push({
+                        day: table.rows[0].cells[c].innerText,
+                        slot: table.rows[r].cells[0].innerText,
+                        subject: cellContent
+                    });
+                }
+            }
+        }
+        if (scheduleData.length === 0) {
+            alert("Расписание пустое. Добавьте предметы");
+            return;
+        }
+
+        const dataStr = JSON.stringify(scheduleData, null, 2);
+
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileDefaultName = 'schedule.json';
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+
+        linkElement.click();
+
+        alert("Файл 'schedule.json' создан и сохранён");
     }
 };
