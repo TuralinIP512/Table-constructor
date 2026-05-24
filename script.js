@@ -21,6 +21,18 @@ window.onload = function() {
 
     let subjects = [];
 
+    // Writing in file button
+    let saveBtn = document.getElementById("saveBtn");
+    saveBtn.onclick = saveScheduleToFile;
+
+    // Output file back into constructor button
+    let loadBtn = document.getElementById("loadBtn");
+    let fileInput = document.getElementById("fileInput");
+    loadBtn.onclick = function() {
+        fileInput.click();
+    };
+    fileInput.onchange = loadScheduleFromFile;
+
     // Modes chanching
     manualBtn.onclick = function() {
         manual.style.display = "flex";
@@ -184,5 +196,86 @@ window.onload = function() {
         let lectures = subjects.filter(s => s.type === "Лекция").length;
         let practices = subjects.filter(s => s.type === "Практика").length;
         document.getElementById("countInfo").textContent = subjects.length + " (лекций: " + lectures + ", практик: " + practices + ")";
+    }
+
+
+    // Writing table in file
+    function saveScheduleToFile() {
+        const table = document.getElementById("schedule");
+        const scheduleData = [];
+
+        for (let r = 1; r <= 6; r++) {
+            for (let c = 1; c <= 7; c++) {
+                const cellContent = table.rows[r].cells[c].innerHTML.trim();
+                if (cellContent !== "") {
+                    scheduleData.push({
+                        day: table.rows[0].cells[c].innerText,
+                        slot: table.rows[r].cells[0].innerText,
+                        subject: cellContent
+                    });
+                }
+            }
+        }
+        if (scheduleData.length === 0) {
+            alert("Расписание пустое. Добавьте предметы");
+            return;
+        }
+
+        const dataStr = JSON.stringify(scheduleData, null, 2);
+
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileDefaultName = 'schedule.json';
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+
+        linkElement.click();
+
+        alert("Файл 'schedule.json' создан и сохранён");
+    }
+
+    function loadScheduleFromFile(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            try {
+                const loadedData = JSON.parse(e.target.result);
+
+                const table = document.getElementById("schedule");
+                for (let r = 1; r <= 6; r++) {
+                    for (let c = 1; c <= 7; c++) {
+                        table.rows[r].cells[c].innerHTML = "";
+                        table.rows[r].cells[c].className = "";
+                    }
+                }
+
+                loadedData.forEach(item => {
+                    const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+                    const slots = ["1 пара", "2 пара", "3 пара", "4 пара", "5 пара", "6 пара"];
+
+                    const rowIndex = slots.indexOf(item.slot);
+                    const columnIndex = days.indexOf(item.day) + 1;
+
+                    if (rowIndex !== -1 && columnIndex !== -1) {
+                    table.rows[rowIndex + 1].cells[columnIndex].innerHTML = item.subject;
+                    table.rows[rowIndex + 1].cells[columnIndex].className = "filled";
+                    }
+                });
+
+                alert("Расписание успешно загружено");
+            } catch (error) {
+                console.error("Ошибка загрузки файлы: ", error);
+                alert("Ошибка, не удалось прочитать файл расписания");
+            }
+        };
+
+        reader.readAsText(file);
     }
 };
