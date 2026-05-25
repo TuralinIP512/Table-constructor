@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
     let manualBtn = document.getElementById("manualBtn");
     let autoBtn = document.getElementById("autoBtn");
     let manual = document.getElementById("manual");
@@ -28,19 +28,19 @@ window.onload = function() {
     // Output file back into constructor button
     let loadBtn = document.getElementById("loadBtn");
     let fileInput = document.getElementById("fileInput");
-    loadBtn.onclick = function() {
+    loadBtn.onclick = function () {
         fileInput.click();
     };
     fileInput.onchange = loadScheduleFromFile;
 
     // Modes chanching
-    manualBtn.onclick = function() {
+    manualBtn.onclick = function () {
         manual.style.display = "flex";
         auto.style.display = "none";
         manualBtn.style.background = "#86e79d";
         autoBtn.style.background = "";
     };
-    autoBtn.onclick = function() {
+    autoBtn.onclick = function () {
         manual.style.display = "none";
         auto.style.display = "flex";
         manualBtn.style.background = "";
@@ -48,15 +48,15 @@ window.onload = function() {
     };
 
     // Manual mode
-    button.onclick = function() {
+    button.onclick = function () {
         let subject = subjectInput.value.trim();
         let type = typeInput.value;
 
-        if(subject === "") {
+        if (subject === "") {
             alert("Введите корректное название предмета");
             return;
         }
-        
+
         let days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
         let columnIndex = days.indexOf(dayInput.value) + 1;
         let slots = ["1 пара", "2 пара", "3 пара", "4 пара", "5 пара", "6 пара"];
@@ -66,7 +66,7 @@ window.onload = function() {
 
         let cell = table.rows[rowIndex + 1].cells[columnIndex];
 
-        if(cell.innerHTML !== "") {
+        if (cell.innerHTML !== "") {
             alert("Эта ячейка занята");
             return;
         }
@@ -77,50 +77,50 @@ window.onload = function() {
     };
 
     // Automatic mode
-    autoAddBtn.onclick = function() {
+    autoAddBtn.onclick = function () {
         let subject = autoSubjectInput.value.trim();
         let type = autoTypeInput.value;
 
-        if(subject === "") {
+        if (subject === "") {
             alert("Введите название предмета");
             return;
         }
 
-        subjects.push({ name: subject, type: type});
+        subjects.push({ name: subject, type: type });
 
         refreshList();
 
         autoSubjectInput.value = "";
     };
-    clearBtn.onclick = function() {
+    clearBtn.onclick = function () {
         subjects = [];
         refreshList();
     };
-    generateBtn.onclick = function() {
-        if(subjects.length === 0) {
+    generateBtn.onclick = function () {
+        if (subjects.length === 0) {
             alert("Добавьте хотя бы один предмет в список");
             return;
         }
 
-        if(subjects.length > 42) {
+        if (subjects.length > 42) {
             alert("Слишком много предметов. Максимально допустимое значение 42");
             return;
         }
-        
+
         let table = document.getElementById("schedule");
-        for(let r = 1; r <= 6; r++) {
-            for(let c = 1; c <= 7; c++) {
+        for (let r = 1; r <= 6; r++) {
+            for (let c = 1; c <= 7; c++) {
                 table.rows[r].cells[c].innerHTML = "";
                 table.rows[r].cells[c].className = "";
             }
         }
 
-        let lectures = subjects.filter(s => s.type === "Лекция");
-        let practices = subjects.filter(s => s.type === "Практика");
+        let lectures = subjects.filter((s) => s.type === "Лекция");
+        let practices = subjects.filter((s) => s.type === "Практика");
 
         let cells = [];
-        for(let r = 1; r <= 6; r++) {
-            for(let c = 1; c <= 6; c++) {
+        for (let r = 1; r <= 6; r++) {
+            for (let c = 1; c <= 6; c++) {
                 cells.push({ row: r, col: c });
             }
         }
@@ -129,62 +129,63 @@ window.onload = function() {
 
         let usedCells = [];
 
-        for(let lecture of lectures) {
+        for (let lecture of lectures) {
             let placed = false;
-            for(let cell of cells) {
-                if(usedCells.includes(cell)) continue;
+            for (let cell of cells) {
+                if (usedCells.includes(cell)) continue;
 
-                let countInDay = usedCells.filter(c => c.col == cell.col).length;
+                let countInDay = usedCells.filter((c) => c.col == cell.col).length;
 
-                if(countInDay < 3) {
+                if (countInDay < 3) {
                     usedCells.push(cell);
-                    table.rows[cell.row].cells[cell.col].innerHTML = lecture.name + "<br><small>Лекция</small>";
+                    table.rows[cell.row].cells[cell.col].innerHTML =
+                        lecture.name + "<br><small>Лекция</small>";
                     table.rows[cell.row].cells[cell.col].className = "filled";
                     placed = true;
                     break;
                 }
             }
-            if(!placed) {
+            if (!placed) {
                 alert("Не удалось разместить все лекции");
                 return;
             }
         }
 
-        for(let practise of practices) {
+        for (let practise of practices) {
             let placed = false;
-            for(let cell of cells) {
-                if(usedCells.includes(cell)) continue;
+            for (let cell of cells) {
+                if (usedCells.includes(cell)) continue;
 
-                let countInDay = usedCells.filter(c => c.col === cell.col).length;
+                let countInDay = usedCells.filter((c) => c.col === cell.col).length;
 
-                if(countInDay < 3) {
+                if (countInDay < 3) {
                     usedCells.push(cell);
-                    table.rows[cell.row].cells[cell.col].innerHTML = practise.name + "<br><small>Практика</small>";
+                    table.rows[cell.row].cells[cell.col].innerHTML =
+                        practise.name + "<br><small>Практика</small>";
                     table.rows[cell.row].cells[cell.col].className = "filled";
                     placed = true;
                     break;
                 }
             }
-            if(!placed) {
+            if (!placed) {
                 alert("Не удалось разместить все практики");
                 return;
             }
         }
     };
 
-
     // Updating list on the screen
     function refreshList() {
         subjectList.innerHTML = "";
 
-        for(let i = 0; i < subjects.length; i++) {
+        for (let i = 0; i < subjects.length; i++) {
             let s = subjects[i];
             let li = document.createElement("li");
             li.textContent = s.name + " (" + s.type + ") ";
 
             let delBtn = document.createElement("button");
             delBtn.textContent = "x";
-            delBtn.onclick = function() {
+            delBtn.onclick = function () {
                 subjects.splice(i, 1);
                 refreshList();
             };
@@ -193,11 +194,11 @@ window.onload = function() {
             subjectList.appendChild(li);
         }
 
-        let lectures = subjects.filter(s => s.type === "Лекция").length;
-        let practices = subjects.filter(s => s.type === "Практика").length;
-        document.getElementById("countInfo").textContent = subjects.length + " (лекций: " + lectures + ", практик: " + practices + ")";
+        let lectures = subjects.filter((s) => s.type === "Лекция").length;
+        let practices = subjects.filter((s) => s.type === "Практика").length;
+        document.getElementById("countInfo").textContent =
+            subjects.length + " (лекций: " + lectures + ", практик: " + practices + ")";
     }
-
 
     // Writing table in file
     function saveScheduleToFile() {
@@ -211,7 +212,7 @@ window.onload = function() {
                     scheduleData.push({
                         day: table.rows[0].cells[c].innerText,
                         slot: table.rows[r].cells[0].innerText,
-                        subject: cellContent
+                        subject: cellContent,
                     });
                 }
             }
@@ -223,12 +224,12 @@ window.onload = function() {
 
         const dataStr = JSON.stringify(scheduleData, null, 2);
 
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-        const exportFileDefaultName = 'schedule.json';
+        const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+        const exportFileDefaultName = "schedule.json";
 
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileDefaultName);
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", exportFileDefaultName);
 
         linkElement.click();
 
@@ -244,7 +245,7 @@ window.onload = function() {
 
         const reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             try {
                 const loadedData = JSON.parse(e.target.result);
 
@@ -256,7 +257,7 @@ window.onload = function() {
                     }
                 }
 
-                loadedData.forEach(item => {
+                loadedData.forEach((item) => {
                     const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
                     const slots = ["1 пара", "2 пара", "3 пара", "4 пара", "5 пара", "6 пара"];
 
@@ -264,8 +265,8 @@ window.onload = function() {
                     const columnIndex = days.indexOf(item.day) + 1;
 
                     if (rowIndex !== -1 && columnIndex !== -1) {
-                    table.rows[rowIndex + 1].cells[columnIndex].innerHTML = item.subject;
-                    table.rows[rowIndex + 1].cells[columnIndex].className = "filled";
+                        table.rows[rowIndex + 1].cells[columnIndex].innerHTML = item.subject;
+                        table.rows[rowIndex + 1].cells[columnIndex].className = "filled";
                     }
                 });
 

@@ -10,8 +10,10 @@ function generateSchedule(subjects) {
     }
 
     // Создаем пустую матрицу 6x7 (6 пар на 7 дней)
-    const schedule = Array(6).fill().map(() => Array(7).fill(null));
-    
+    const schedule = Array(6)
+        .fill()
+        .map(() => Array(7).fill(null));
+
     // Массив для отслеживания количества занятий в каждом дне (столбце)
     const dayOccupancy = new Array(7).fill(0); // Индексы 0-6
 
@@ -37,16 +39,16 @@ function generateSchedule(subjects) {
 
         // Размещаем предмет
         schedule[row][col] = subject;
-        
+
         // Увеличиваем счетчик для дня
         dayOccupancy[col]++;
-        
+
         return true;
     }
 
     // Разделяем предметы на лекции и практики
-    const lectures = subjects.filter(s => s.type === "Лекция");
-    const practices = subjects.filter(s => s.type === "Практика");
+    const lectures = subjects.filter((s) => s.type === "Лекция");
+    const practices = subjects.filter((s) => s.type === "Практика");
 
     // Размещаем лекции
     for (const lecture of lectures) {
@@ -54,14 +56,14 @@ function generateSchedule(subjects) {
             throw new Error("Не удалось разместить все лекции");
         }
     }
-    
+
     // Размещаем практики
     for (const practice of practices) {
         if (!placeSubject(practice)) {
             throw new Error("Не удалось разместить все практики");
         }
     }
-    
+
     return schedule;
 }
 
